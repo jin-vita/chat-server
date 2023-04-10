@@ -14,9 +14,13 @@ let io = require('socket.io')(server, {
 app.use(express.json());
 app.use(cors());
 io.on('connection', (socket) => {
-    console.log('connected');
+    console.log('socket connected');
+    console.log(socket.id, 'has joined');
+    socket.on('/test', (message) => {
+        console.log(message);
+    });
 });
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
     console.log('server started');
 });
