@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
     socket.on('sign-in', (id) => {
         console.log(id);
         clients[id] = socket;
-        console.log(clients);
+        // console.log(clients);
     });
 
     socket.on("message", (msg) => {
