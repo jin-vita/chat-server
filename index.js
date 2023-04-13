@@ -29,13 +29,15 @@ io.on('connection', (socket) => {
         // console.log(clients);
     });
 
-    socket.on("message", (message) => {
+    socket.on('message', (message) => {
         // { from: 'dd', too: 'cc', message: 'aaa' }
         console.log(message);
-        const too = message.too;
-        console.log('message to : ' + too);
-        if (clients[too]) {
-            clients[too].emit("message", message);
+        const from = message.from;
+        const to = message.to;
+        console.log('message to : ' + to);
+        clients[from].emit('check', message);
+        if (clients[to]) {
+            clients[to].emit('message', message);
         }
     });
 });
