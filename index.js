@@ -35,6 +35,7 @@ io.on('connection', (socket) => {
         const from = message.from;
         const to = message.to;
         console.log('message to : ' + to);
+        message.network = 'OK';
         clients[from].emit('check', message);
         if (clients[to]) {
             clients[to].emit('message', message);
