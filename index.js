@@ -36,9 +36,22 @@ io.on('connection', (socket) => {
         const to = message.to;
         console.log('message to : ' + to);
         message.network = 'OK';
-        clients[from].emit('check', message);
+        if (clients[from]) {
+            clients[from].emit('check', message);
+        }
         if (clients[to]) {
             clients[to].emit('message', message);
+        }
+    });
+
+    socket.on('isRead', (message) => {
+        // { from: 'dd', too: 'cc', message: 'aaa' }
+        console.log(message);
+        const from = message.from;
+        console.log('message to : ' + to);
+        message.isRead = true;
+        if (clients[from]) {
+            clients[from].emit('isRead', message);
         }
     });
 });
