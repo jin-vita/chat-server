@@ -1,19 +1,18 @@
 const express = require('express');
-let http = require('http');
+const http = require('http');
 const cors = require('cors');
 const app = express();
-const mysql = require('mysql');
-const port = process.env.PORT || 5000;
-let server = http.createServer();
-let io = require('socket.io')(server, {
-    cors: {
-        origin: '*'
-    }
+const PORT = process.env.PORT || 5000;
+
+const corsOptions = {
+    // origin: "http://localhost:8081"
+    origin: '*'
+};
+
+const io = require('socket.io')(http.createServer(), {
+    cors: corsOptions
 });
 
-// middleware
-app.use(express.json());
-app.use(cors());
 const clients = {};
 io.on('connection', (socket) => {
     console.log('socket connected');
@@ -60,6 +59,18 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(port, '0.0.0.0', () => {
-    console.log('server started');
+app.use(cors(corsOptions));
+// parse requests of content-type - application/json
+app.use(express.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({extended: true}));
+
+app.get('/', (req, res) => {
+    res.json({message: "Welcome to VITALK."});
+});
+
+require('./app/routes/vitalk.routes.js')(app);
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
