@@ -36,10 +36,15 @@ io.on('connection', (socket) => {
         const to = message.to;
         console.log('message to : ' + to);
         message.network = 'OK';
-        if (clients[from]) {
-            clients[from].emit('check', message);
+        if (!clients[from]) {
+            clients[from] = socket;
         }
-        if (clients[to] && from !== to) {
+        clients[from].emit('check', message);
+
+        if (!clients[to]) {
+            clients[to] = socket;
+        }
+        if (from !== to) {
             clients[to].emit('message', message);
         }
     });
